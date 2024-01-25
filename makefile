@@ -48,7 +48,7 @@ maindrec: main.o libclassrec.so
 	gcc -o maindrec main.o -L. -lclassrec
 
 # all: compiles all libraries and programs (do no re compile)
-all: $(BASIC) $(LOOP) $(REC) loops recursives recursived loopd mains maindloop maindrec
+all: $(BASIC) $(LOOP) $(REC) recursives recursived loopd mains maindloop maindrec
 
 # clean: deletes all the compiled files except of .h, .c, .txt and the makefile itself
 clean:
