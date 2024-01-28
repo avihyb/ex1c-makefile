@@ -1,45 +1,59 @@
-CFLAGS = -fPIC -Wall -g
-CC = gcc
 
-EXECUTABLES = mains maindloop maindrec
+LOOP=advancedClassificationLoop
+REC=advancedClassificationRecursion
+BASIC=basicClassification
+FLAG=-Wall -g -fPIC
+CC=gcc
+AR=ar
+EXECUTEABLES = mains maindloop maindrec
 
-BASIC = basicClassification
-LOOP = advancedClassificationLoop
-REC = advancedClassificationRecursion
+# Compiling Source Files:
 
-OBJS = $(BASIC).o $(LOOP).o $(REC).o
+main.o: main.c NumClass.h
+	$(CC) $(FLAG) -c main.c -o main.o
 
-all: $(EXECUTABLES)
+$(LOOP).o: $(LOOP).c NumClass.h
+	$(CC) $(FLAG) -c $(LOOP).c -o $(LOOP)
 
-mains: main.o recursives
-	$(CC) $(CFLAGS) -o $@ $^
+$(REC).o: $(REC).c NumClass.h
+	$(CC) $(FLAG) -c $(REC).c -o $(REC)
 
-# maindloop: a main program linked to libclassloops.so
-maindloop: main.o loopd
-	$(CC) -o $@ $^
+$(BASIC).o: $(BASIC).c NumClass.h
+	$(CC) $(FLAG) -c $(BASIC).c -o $(BASIC)
 
-#maindrec: a main program linked to libclassrec.so
-maindrec: main.o recursived
-	$(CC) -o $@ $^
+# loops: creates the static library libclasslops.a
+loops: $(LOOP) $(BASIC)
+	ar rcs libclassloops.a $(LOOP) $(BASIC)
 
-# All object files to be built depend on NumClass.h
-# They will otherwise be built according to the built-in rule
-$(OBJS): NumClass.h
+# recursives: creates the static library libclassrec.a
+recursives: $(REC) $(BASIC) 
+	ar rcs libclassrec.a $(REC) $(BASIC)
 
-recursives: $(REC).o $(BASIC).o 
-	$(AR) rcs libclassrec.a $^
+# recursived: creates the dynamic library libclassrec.so
+recursived: $(REC) $(BASIC) 
+	gcc $(FLAG) -shared -o libclassrec.so $(REC) $(BASIC) 
 
-recursived: $(REC).o $(BASIC).o
-	$(CC) $(CFLAGS) -shared -o libclassrec.so $^
+# loopd: creates the dynamic library libclassloops.so
+loopd: $(LOOP) $(BASIC)
+	gcc $(FLAG) -shared -o libclassloops.so $(LOOP) $(BASIC)
 
-loops: $(LOOP).o $(BASIC).o
-	$(AR) rcs libclassloops.a $^
+# mains: creates a main program linked to libclassrec.a
+mains: main.o libclassrec.a 
+	gcc $(FLAG) -o mains main.o -L. -lclassrec
 
-loopd: $(LOOP).o $(BASIC).o
-	$(CC) $(CFLAGS) -shared -o libclassloops.so $^
+# maindloop: creates a main program linked to libclassloops.so
+maindloop: main.o libclassloops.so
+	gcc -o maindloop main.o -L. -lclassloops
 
-# clean: delete all generated files
+#maindrec: creates a main program linked to libclassrec.so
+maindrec: main.o libclassrec.so 
+	gcc -o maindrec main.o -L. -lclassrec
+
+# all: compiles all libraries and programs (do no re compile)
+all: $(EXECUTEABLES)
+
+# clean: deletes all the compiled files except of .h, .c, .txt and the makefile itself
 clean:
-	rm -f $(EXECUTABLES) $(OBJS) libclassloops.a libclassrec.a libclassrec.so libclassloops.so
+	rm -f libclassloops.a libclassrec.a libclassrec.so libclassloops.so $(EXECUTEABLES) *.o *.txt~
 
 .PHONY: all clean
