@@ -11,7 +11,7 @@ int isArmstrongRecursive(int x, int digits){
 
 int isArmstrong(int x){
     if(x >= 0 && x <= 9){
-        return 0;
+        return 1;
     }
     int digits = countDigits(x);
     int ans = isArmstrongRecursive(x, digits);
