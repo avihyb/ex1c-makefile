@@ -11,15 +11,15 @@ OBJS = $(BASIC).o $(LOOP).o $(REC).o
 
 all: $(EXECUTABLES)
 
-mains: main.o libclassrec.a 
+mains: main.o recursives
 	$(CC) $(CFLAGS) -o $@ $^
 
 # maindloop: a main program linked to libclassloops.so
-maindloop: main.o libclassloops.so
+maindloop: main.o loopd
 	$(CC) -o $@ $^
 
 #maindrec: a main program linked to libclassrec.so
-maindrec: main.o libclassrec.so 
+maindrec: main.o recursived
 	$(CC) -o $@ $^
 
 # All object files to be built depend on NumClass.h
