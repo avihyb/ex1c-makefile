@@ -1,3 +1,8 @@
+BASIC=basicClassification
+LOOP=advancedClassificationLoop
+REC=advancedClassificationRecursion
+AR=ar
+
 all: mains maindloop maindrec loops recursives 
 
 loops: libclassloops.a
@@ -17,31 +22,31 @@ maindloop: main.o libclassloops.so
 maindrec: main.o libclassrec.so
 	gcc -Wall main.o ./libclassrec.so -o maindrec
 
-libclassloops.a:basicClassification.o advancedClassificationLoop.o
-	ar rcs libclassloops.a basicClassification.o advancedClassificationLoop.o
+libclassloops.a: $(BASIC).o $(LOOP).o
+	ar rcs libclassloops.a $(BASIC).o $(LOOP).o
 	ranlib libclassloops.a
 
-libclassrec.a: basicClassification.o advancedClassificationRecursion.o
-	ar rcs libclassrec.a basicClassification.o advancedClassificationRecursion.o
+libclassrec.a: $(BASIC).o $(REC).o
+	ar rcs libclassrec.a $(BASIC).o $(REC).o
 	ranlib libclassrec.a
 
-libclassloops.so: basicClassification.c advancedClassificationLoop.c basicClassification.o advancedClassificationLoop.o
-	gcc -Wall basicClassification.o advancedClassificationLoop.o -shared -o libclassloops.so
+libclassloops.so: $(BASIC).c $(LOOP).c $(BASIC).o $(LOOP).o
+	gcc -Wall $(BASIC).o $(LOOP).o -shared -o libclassloops.so
 
-libclassrec.so: basicClassification.c advancedClassificationRecursion.c basicClassification.o advancedClassificationRecursion.o	
-	gcc -Wall  basicClassification.o advancedClassificationRecursion.o -shared -o libclassrec.so
+libclassrec.so: $(BASIC).c $(REC).c $(BASIC).o $(REC).o	
+	gcc -Wall  $(BASIC).o $(REC).o -shared -o libclassrec.so
 
 main.o: main.c
 	gcc -Wall -c main.c
 
-basicClassification.o: basicClassification.c
-	gcc -Wall -c basicClassification.c
+$(BASIC).o: $(BASIC).c
+	gcc -Wall -c $(BASIC).c
 
-advancedClassificationLoop.o: advancedClassificationLoop.c 
-	gcc -Wall -fPIC -c basicClassification.c advancedClassificationLoop.c
+$(LOOP).o: $(LOOP).c 
+	gcc -Wall -fPIC -c $(BASIC).c $(LOOP).c
 
-advancedClassificationRecursion.o: advancedClassificationRecursion.c 
-	gcc -Wall -fPIC -c basicClassification.c advancedClassificationRecursion.c
+$(REC).o: $(REC).c 
+	gcc -Wall -fPIC -c $(BASIC).c $(REC).c
 
 clean:
 	rm *.so *.a *.o mains maindloop maindrec
