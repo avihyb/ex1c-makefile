@@ -42,7 +42,8 @@ int countDigits(int num){
 
 int isPalindrome(int x){
     int digits = countDigits(x);
-    if(isPalindromeRecursive(x, 0, digits) == x){
+    int ans = isPalindromeRecursive(x, 0, digits);
+    if(ans == x){
         return 1;
     }
     return 0;
