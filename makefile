@@ -26,17 +26,17 @@ maindrec: main.o libclassrec.so
 # They will otherwise be built according to the built-in rule
 $(OBJS): NumClass.h
 
-libclassrec.a: $(REC).o $(BASIC).o 
-	$(AR) rcs $@ $^
+recursives: $(REC).o $(BASIC).o 
+	$(AR) rcs libclassrec.a $^
 
-libclassrec.so: $(REC).o $(BASIC).o
-	$(CC) $(CFLAGS) -shared -o $@ $^
+recursived: $(REC).o $(BASIC).o
+	$(CC) $(CFLAGS) -shared -o libclassrec.so $^
 
-libclassloops.a: $(LOOP).o $(BASIC).o
-	$(AR) rcs $@ $^
+loops: $(LOOP).o $(BASIC).o
+	$(AR) rcs libclassloops.a $^
 
-libclassloops.so: $(LOOP).o $(BASIC).o
-	$(CC) $(CFLAGS) -shared -o $@ $^
+loopd: $(LOOP).o $(BASIC).o
+	$(CC) $(CFLAGS) -shared -o libclassloops.so $^
 
 # clean: delete all generated files
 clean:
