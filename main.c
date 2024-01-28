@@ -19,7 +19,7 @@ int main(){
     printf("The Palindromes are:");
     for(int i = a; i <= b; i++){
         if(isPalindrome(i) == 1){
-            printf(" %d ", i);
+            printf(" %d", i);
         }
     }
     
@@ -37,7 +37,7 @@ int main(){
     printf("The Strong numbers are:");
     for(int i = a; i <= b; i++){
         if(isStrong(i) == 1){
-            printf(" %d ", i);
+            printf(" %d", i);
         }
     }
    
